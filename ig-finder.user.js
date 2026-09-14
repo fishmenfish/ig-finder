@@ -17,7 +17,7 @@
 // @connect      www.instagram.com
 // @sandbox      DOM
 // @license      MIT
-// @antifeature  NonFreeNet
+// @antifeature  membership This script requires an Instagram account.
 // @run-at       document-idle
 // @noframes
 // ==/UserScript==

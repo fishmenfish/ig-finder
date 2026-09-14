@@ -4,11 +4,11 @@
 // @version      2.1.1
 // @description  Review non-followers with search, account-specific saved scans, export and controlled unfollow actions.
 // @author       faizmuhhh
-// @homepageURL  https://openuserjs.org/scripts/faizmuhhh/Instagram_Non-Followers_Finder
+// @homepageURL  https://openuserjs.org/scripts/fishmanfish/Instagram_Non-Followers_Finder
 // @source       https://github.com/fishmenfish/ig-finder
 // @supportURL   https://github.com/fishmenfish/ig-finder/issues
-// @downloadURL  https://openuserjs.org/install/faizmuhhh/Instagram_Non-Followers_Finder.user.js
-// @updateURL    https://openuserjs.org/install/faizmuhhh/Instagram_Non-Followers_Finder.user.js
+// @downloadURL  https://openuserjs.org/install/fishmanfish/Instagram_Non-Followers_Finder.user.js
+// @updateURL    https://openuserjs.org/install/fishmanfish/Instagram_Non-Followers_Finder.user.js
 // @match        https://www.instagram.com/*
 // @grant        GM_setValue
 // @grant        GM_getValue

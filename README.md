@@ -65,3 +65,7 @@ These endpoints are not a stable public API. Other implementations do not guaran
 ## License
 
 MIT License. See [LICENSE](LICENSE).
+
+## OpenUserJS
+
+Install and update from [OpenUserJS](https://openuserjs.org/scripts/faizmuhhh/Instagram_Non-Followers_Finder). The script has the `NonFreeNet` antifeature because it requires an Instagram account and uses Instagram web endpoints.

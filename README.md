@@ -1,6 +1,6 @@
 # Instagram Non-Followers Finder
 
-![Anime-style mascot](https://api.dicebear.com/9.x/adventurer/svg?seed=ig-finder)
+![Anime Visitor Counter](https://anime-counter.lulushu.workers.dev/@fishmenfish?theme=naruto)
 
 Find Instagram accounts that do not follow you back.
 

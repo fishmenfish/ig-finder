@@ -1,57 +1,59 @@
 # Instagram Non-Followers Finder 2.1.1
 
-Userscript satu file dengan pencarian, filter, whitelist, hasil per akun, export CSV, dan unfollow terpilih.
+A single-file Tampermonkey userscript for finding Instagram accounts that do not follow you back. It includes search, filters, a whitelist, account-specific saved results, CSV export, and controlled unfollow actions.
 
-## Atribusi dan kelanjutan proyek
+## Authorship and project continuity
 
-Saya adalah original author script ini di [Greasy Fork](https://greasyfork.org/en/scripts/537246-instagram-non-followers-finder). Repository ini memakai akun GitHub baru karena akun lama kehilangan akses autentikasi dan tidak bisa digunakan untuk login lagi. Kode dipindahkan ke akun baru supaya pengembangan dan update tetap bisa dilanjutkan.
+I am the original author of this script on [Greasy Fork](https://greasyfork.org/en/scripts/537246-instagram-non-followers-finder). This repository was moved to a new GitHub account because I lost authentication access to the old account and can no longer sign in. The new repository keeps development and updates active.
 
-## Instalasi
+## Installation
 
-Ganti seluruh isi script di Tampermonkey dengan `ig-finder.user.js`, simpan, nonaktifkan salinan versi lama, lalu reload Instagram. Header panel harus menampilkan **FINDER v2.1.1**. Mulai dengan batas 10 akun untuk memeriksa koneksi.
+Replace the contents of your Tampermonkey script with `ig-finder.user.js`, save it, disable older copies, and reload Instagram. The panel should show **FINDER v2.1.1**. Start with a limit of 10 accounts to verify the connection.
 
-`ig-finder.js` adalah source; `ig-finder.user.js` salinan instalasi. `ig-finder.v1.3.0.backup.js` menyimpan versi asli. URL auto-update lama dilepas supaya build lokal tidak tertimpa versi remote.
+`ig-finder.js` is the source file, `ig-finder.user.js` is the installable copy, and `ig-finder.v1.3.0.backup.js` preserves the original version. The old auto-update URL was removed so local builds are not overwritten by a remote version.
 
-## Perubahan scan
+## Scan behavior
 
-Query hash GraphQL lama sudah dilepas. Scan mengambil `users` dari `/api/v1/friendships/{account}/following/` dan melanjutkan pagination dengan `next_max_id` sebagai parameter `max_id`.
+The script uses `/api/v1/friendships/{account}/following/` and continues pagination with `next_max_id` as the `max_id` parameter.
 
-Jika daftar tidak menyertakan status follow-back boolean, script meminta `/api/v1/friendships/show/{id}/`. `followed_by` berarti akun itu mengikuti pengguna, sedangkan `following` berarti pengguna mengikuti akun itu. Status hilang tidak dianggap false: akun tersebut tidak masuk hasil unfollow dan scan ditandai parsial.
+When a page does not include a follow-back status, the script requests `/api/v1/friendships/show/{id}/`. `followed_by` means that the account follows you, while `following` means that you follow the account. Missing status is treated as unknown: the account is excluded from unfollow actions and the scan is marked partial.
 
-Halaman pertama kosong diverifikasi lewat `/api/v1/users/{account}/info/`. Hasil nol diterima hanya jika ID profil cocok dan `following_count` benar-benar nol. Jumlah positif, identitas tidak cocok, atau data tidak lengkap menghasilkan error tanpa menimpa hasil tersimpan sebelumnya. Halaman lanjutan kosong atau berulang juga ditolak sebagai scan lengkap.
+An empty first page is verified through `/api/v1/users/{account}/info/`. An empty result is accepted only when the profile ID matches and `following_count` is actually zero. Positive counts, mismatched identity, incomplete data, empty continuation pages, and repeated cursors fail safely without replacing the previous saved scan.
 
-Pemeriksaan per akun membutuhkan request tambahan. Jeda pengaturan berlaku sebelum pemeriksaan tersebut dan di antara halaman.
+Per-account relationship checks require additional requests. The configured delay applies before those checks and between pages.
 
-## Penggunaan
+## Features
 
-- Batas scan adalah jumlah following diperiksa, bukan jumlah hasil non-followers.
-- Jeda/Lanjutkan/Stop tersedia untuk scan dan antrean unfollow. Stop membatalkan request scan langsung; request unfollow berjalan diselesaikan dahulu. Menutup panel tidak menghentikan proses.
-- Whitelist menerima username dengan/tanpa @, dipisahkan koma, spasi, atau baris baru. Tidak ada whitelist tersembunyi.
-- Pencarian berdasarkan username/nama, filter verifikasi, urutan A-Z/Z-A, dan 50 akun per halaman.
-- Unfollow hanya untuk akun dipilih setelah konfirmasi. Pilihan yang tidak cocok filter dibersihkan. Hasil sukses dihapus dari daftar dan penyimpanan.
-- CSV mencakup seluruh hasil sesuai filter, waktu scan, serta penanda parsial.
-- Pengaturan dan hasil tersimpan per akun. Muat hasil tersimpan mendukung format lama; scan ulang untuk data terbaru.
+- The scan limit is the number of following accounts checked, not the number of non-followers found.
+- Pause, resume, and stop controls are available for scans and the unfollow queue. Closing the panel does not stop an active job.
+- Whitelist usernames with or without `@`, separated by commas, spaces, or new lines.
+- Search by username or name, filter verified accounts, sort A-Z or Z-A, and browse 50 accounts per page.
+- Unfollow selected accounts only after confirmation. Successful unfollows are removed from the list and saved data.
+- CSV export includes all filtered results, scan time, and the partial-scan marker.
+- Settings and results are stored per Instagram account. Older saved-result formats can still be loaded.
 
-## Transport dan diagnosis
+## Transport and diagnostics
 
-GET memakai `GM_xmlhttpRequest` jika tersedia, terbatas ke www.instagram.com; pengelola script tanpa API itu memakai fetch. `@sandbox DOM` memungkinkan eksekusi di konteks ekstensi. Unfollow tetap memakai fetch sesi halaman tanpa pengulangan POST otomatis.
+GET requests use `GM_xmlhttpRequest` when available and are restricted to `www.instagram.com`; managers without that API use `fetch`. The `@sandbox DOM` declaration allows the script to run in the extension context. Unfollow requests use the page session and are not automatically retried.
 
-Timeout 25 detik melepaskan proses meskipun transport atau pembacaan body macet. HTTP error, rate limit, challenge, dan pergantian akun menghentikan proses.
+A 25-second timeout releases a stuck request. HTTP errors, rate limits, challenges, and account changes stop the scan. When a scan fails, the details panel shows the stage, transport, request count, HTTP status, and a safe response summary. Cookies, tokens, and account response bodies are never logged.
 
-Status terlihat di atas panel. Detail scan otomatis terbuka saat gagal, menampilkan tahap, transport, jumlah request, HTTP, dan ringkasan respons. Cookie, token, serta isi respons akun tidak dicetak. Awalan console: `[IG Finder v2.1.1]`.
+## References and limitations
 
-## Referensi dan batasan
+References checked on September 14, 2026:
 
-Referensi dicek 14 September 2026:
+- [instagrapi user/friendships](https://github.com/subzeroid/instagrapi/blob/master/instagrapi/mixins/user.py) for REST following, pagination, relationship checks, and profile info patterns.
+- [Instagram Follower Checker](https://github.com/HenryLok0/Instagram_Follower_Checker) for using Instagram web REST endpoints.
+- [Tampermonkey request](https://www.tampermonkey.net/documentation.php?locale=en&q=GM_xmlhttpRequest) and [sandbox](https://www.tampermonkey.net/documentation.php?locale=en&q=sandbox).
 
-- [instagrapi user/friendships](https://github.com/subzeroid/instagrapi/blob/master/instagrapi/mixins/user.py): pola following REST, pagination, pemeriksaan hubungan, dan info profil.
-- [Instagram Follower Checker](https://github.com/HenryLok0/Instagram_Follower_Checker): penggunaan daftar REST di domain web Instagram.
-- [Tampermonkey request](https://www.tampermonkey.net/documentation.php?locale=en&q=GM_xmlhttpRequest) dan [sandbox](https://www.tampermonkey.net/documentation.php?locale=en&q=sandbox).
+These endpoints are not a stable public API. Other implementations do not guarantee access for every account or browser. A delay does not guarantee protection from Instagram restrictions, and results are a snapshot of the accounts checked.
 
-Endpoint tersebut bukan API publik stabil. Referensi implementasi lain tidak menjamin akses pada setiap akun/browser. Belum diuji langsung pada sesi Instagram pengguna. Jeda tidak menjamin bebas pembatasan. Hasil adalah snapshot akun diperiksa.
+## Local tests
 
-## Tes lokal
+Run `node --check ig-finder.js` and `node check.cjs`. The test suite uses a simulated DOM and responses; it does not make Instagram requests or perform real unfollows. It covers limits, REST pagination, primary-key IDs, relationship direction, invalid empty results, genuinely empty accounts, unknown status, pause/stop, storage, account changes, unfollow behavior, extension requests, and stuck-request timeouts.
 
-Jalankan `node --check ig-finder.js` dan `node check.cjs`. Tes memakai DOM dan respons simulasi tanpa dependency, request Instagram, atau unfollow nyata. Cakupan: limit, pagination REST, ID pk, arah hubungan, hasil kosong keliru, akun benar-benar kosong, status hilang, pause/stop, penyimpanan, pergantian akun, unfollow, request ekstensi, dan timeout macet.
+After editing the source, refresh the installable copy with:
 
-Setelah mengedit source: `Copy-Item -LiteralPath ig-finder.js -Destination ig-finder.user.js`.
+```powershell
+Copy-Item -LiteralPath ig-finder.js -Destination ig-finder.user.js
+```

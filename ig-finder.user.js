@@ -7,8 +7,8 @@
 // @homepageURL  https://openuserjs.org/scripts/fishmanfish/Instagram_Non-Followers_Finder
 // @source       https://github.com/fishmenfish/ig-finder
 // @supportURL   https://github.com/fishmenfish/ig-finder/issues
-// @downloadURL  https://openuserjs.org/install/fishmanfish/Instagram_Non-Followers_Finder.user.js
-// @updateURL    https://openuserjs.org/install/fishmanfish/Instagram_Non-Followers_Finder.user.js
+// @downloadURL  https://openuserjs.org/src/scripts/fishmanfish/Instagram_Non-Followers_Finder.user.js
+// @updateURL    https://openuserjs.org/meta/fishmanfish/Instagram_Non-Followers_Finder.meta.js
 // @match        https://www.instagram.com/*
 // @grant        GM_setValue
 // @grant        GM_getValue

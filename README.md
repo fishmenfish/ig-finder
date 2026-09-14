@@ -10,7 +10,7 @@ I am the original author of this script on [Greasy Fork](https://greasyfork.org/
 
 Replace the contents of your Tampermonkey script with `ig-finder.user.js`, save it, disable older copies, and reload Instagram. The panel should show **FINDER v2.1.1**. Start with a limit of 10 accounts to verify the connection.
 
-`ig-finder.js` is the source file, `ig-finder.user.js` is the installable copy, and `ig-finder.v1.3.0.backup.js` preserves the original version. The old auto-update URL was removed so local builds are not overwritten by a remote version.
+`ig-finder.user.js` is the installable userscript. The old auto-update URL was removed so local builds are not overwritten by a remote version.
 
 ## Scan behavior
 
@@ -50,10 +50,4 @@ These endpoints are not a stable public API. Other implementations do not guaran
 
 ## Local tests
 
-Run `node --check ig-finder.js` and `node check.cjs`. The test suite uses a simulated DOM and responses; it does not make Instagram requests or perform real unfollows. It covers limits, REST pagination, primary-key IDs, relationship direction, invalid empty results, genuinely empty accounts, unknown status, pause/stop, storage, account changes, unfollow behavior, extension requests, and stuck-request timeouts.
-
-After editing the source, refresh the installable copy with:
-
-```powershell
-Copy-Item -LiteralPath ig-finder.js -Destination ig-finder.user.js
-```
+The published repository contains the installable userscript only. Local development tests can be run from a private working copy that includes the source and test harness.
